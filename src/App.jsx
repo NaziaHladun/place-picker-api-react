@@ -6,6 +6,8 @@ import DeleteConfirmation from "./components/DeleteConfirmation.jsx";
 import logoImg from "./assets/logo.png";
 import AvailablePlaces from "./components/AvailablePlaces.jsx";
 
+import { updateUserPlaces } from "./http.js";
+
 function App() {
   const selectedPlace = useRef();
 
@@ -34,18 +36,7 @@ function App() {
     });
 
     try {
-      const response = await fetch("http://localhost:3000/user-places", {
-        method: "PUT",
-        body: JSON.stringify({ places: [selectedPlace, ...userPlaces] }),
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
-      const resData = await response.json();
-
-      if (!response.ok) {
-        throw new Error("Failed to update user data.");
-      }
+      await updateUserPlaces([selectedPlace, ...userPlaces]);
     } catch (error) {
       //...
     }
