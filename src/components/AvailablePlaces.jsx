@@ -17,7 +17,7 @@ export default function AvailablePlaces({ onSelectPlace }) {
         const resData = await response.json();
 
         if (!response.ok) {
-          throw new Error("Failed tp fetch places");
+          throw new Error("Failed to fetch places");
         }
 
         navigator.geolocation.getCurrentPosition((position) => {

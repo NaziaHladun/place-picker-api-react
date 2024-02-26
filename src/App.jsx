@@ -1,10 +1,10 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from "react";
 
-import Places from './components/Places.jsx';
-import Modal from './components/Modal.jsx';
-import DeleteConfirmation from './components/DeleteConfirmation.jsx';
-import logoImg from './assets/logo.png';
-import AvailablePlaces from './components/AvailablePlaces.jsx';
+import Places from "./components/Places.jsx";
+import Modal from "./components/Modal.jsx";
+import DeleteConfirmation from "./components/DeleteConfirmation.jsx";
+import logoImg from "./assets/logo.png";
+import AvailablePlaces from "./components/AvailablePlaces.jsx";
 
 function App() {
   const selectedPlace = useRef();
@@ -22,7 +22,7 @@ function App() {
     setModalIsOpen(false);
   }
 
-  function handleSelectPlace(selectedPlace) {
+  async function handleSelectPlace(selectedPlace) {
     setUserPlaces((prevPickedPlaces) => {
       if (!prevPickedPlaces) {
         prevPickedPlaces = [];
@@ -32,6 +32,23 @@ function App() {
       }
       return [selectedPlace, ...prevPickedPlaces];
     });
+
+    try {
+      const response = await fetch("http://localhost:3000/user-places", {
+        method: "PUT",
+        body: JSON.stringify({ places: [selectedPlace, ...userPlaces] }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Failed to update user data.");
+      }
+    } catch (error) {
+      //...
+    }
   }
 
   const handleRemovePlace = useCallback(async function handleRemovePlace() {
